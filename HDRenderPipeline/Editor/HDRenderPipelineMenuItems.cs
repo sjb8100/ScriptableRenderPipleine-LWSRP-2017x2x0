@@ -115,10 +115,8 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
         [MenuItem("HDRenderPipeline/Export Sky to Image")]
         static void ExportSkyToImage()
         {
-            //HDRenderPipeline renderpipeline = UnityEngine.Experimental.Rendering.RenderPipelineManager.currentPipeline as HDRenderPipeline;
-
-            /*
-            if (renderpipeline == null)
+            HDRenderPipeline renderpipeline = UnityEngine.Experimental.Rendering.RenderPipelineManager.currentPipeline as HDRenderPipeline;
+            if(renderpipeline == null)
             {
                 Debug.LogError("HDRenderPipeline is not instantiated.");
                 return;
@@ -129,12 +127,11 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
             {
                 return;
             }
-            */
 
             // Encode texture into PNG
             byte[] bytes = null;
-            //bytes = result.EncodeToEXR(Texture2D.EXRFlags.CompressZIP);
-            //Object.DestroyImmediate(result);
+            bytes = result.EncodeToEXR(Texture2D.EXRFlags.CompressZIP);
+            Object.DestroyImmediate(result);
 
             string assetPath = EditorUtility.SaveFilePanel("Export Sky", "Assets", "SkyExport", "exr");
             if (!string.IsNullOrEmpty(assetPath))

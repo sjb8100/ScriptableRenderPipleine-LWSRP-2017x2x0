@@ -50,10 +50,10 @@ public class LightweightPipelineMaterialEditor : ShaderGUI
                 "This material has alpha cutout enabled. Alpha cutout has severe performance impact on mobile!");
 
         public static GUIStyle warningStyle = new GUIStyle();
-        //public static readonly string[] blendNames = Enum.GetNames(typeof(UpgradeBlendMode));
-        //public static readonly string[] specSourceNames = Enum.GetNames(typeof(SpecularSource));
-        //public static readonly string[] glossinessSourceNames = Enum.GetNames(typeof(GlossinessSource));
-        //public static readonly string[] speculaSourceNames = Enum.GetNames(typeof(ReflectionSource));
+        public static readonly string[] blendNames = Enum.GetNames(typeof(UpgradeBlendMode));
+        public static readonly string[] specSourceNames = Enum.GetNames(typeof(SpecularSource));
+        public static readonly string[] glossinessSourceNames = Enum.GetNames(typeof(GlossinessSource));
+        public static readonly string[] speculaSourceNames = Enum.GetNames(typeof(ReflectionSource));
 
         public static string renderingModeLabel = "Rendering Mode";
         public static string specularSourceLabel = "Specular Color Source";
@@ -121,11 +121,11 @@ public class LightweightPipelineMaterialEditor : ShaderGUI
         EditorGUILayout.Space();
         EditorGUILayout.Space();
 
-        //if ((UpgradeBlendMode)blendModeProp.floatValue == UpgradeBlendMode.Cutout)
-        //{
-        //    Styles.warningStyle.normal.textColor = Color.yellow;
-        //    EditorGUILayout.LabelField(Styles.alphaCutoutWarning, Styles.warningStyle);
-        //}
+        if ((UpgradeBlendMode)blendModeProp.floatValue == UpgradeBlendMode.Cutout)
+        {
+            Styles.warningStyle.normal.textColor = Color.yellow;
+            EditorGUILayout.LabelField(Styles.alphaCutoutWarning, Styles.warningStyle);
+        }
     }
 
     public override void AssignNewShaderToMaterial(Material material, Shader oldShader, Shader newShader)
@@ -152,10 +152,10 @@ public class LightweightPipelineMaterialEditor : ShaderGUI
     {
         int modeValue = (int)blendModeProp.floatValue;
         EditorGUI.BeginChangeCheck();
-        //modeValue = EditorGUILayout.Popup(Styles.renderingModeLabel, modeValue, Styles.blendNames);
+        modeValue = EditorGUILayout.Popup(Styles.renderingModeLabel, modeValue, Styles.blendNames);
         if (EditorGUI.EndChangeCheck())
             blendModeProp.floatValue = modeValue;
-        /*
+
         UpgradeBlendMode mode = (UpgradeBlendMode)blendModeProp.floatValue;
 
         EditorGUILayout.Space();
@@ -171,10 +171,9 @@ public class LightweightPipelineMaterialEditor : ShaderGUI
         {
             m_MaterialEditor.TexturePropertySingleLine(Styles.albedoAlphaLabel, albedoMapProp, albedoColorProp);
             m_MaterialEditor.TextureScaleOffsetProperty(albedoMapProp);
-            //if (mode == UpgradeBlendMode.Cutout)
-             //   m_MaterialEditor.RangeProperty(alphaCutoffProp, "Cutoff");
+            if (mode == UpgradeBlendMode.Cutout)
+                m_MaterialEditor.RangeProperty(alphaCutoffProp, "Cutoff");
         }
-        */
     }
 
     private void DoSpecular()
@@ -183,10 +182,10 @@ public class LightweightPipelineMaterialEditor : ShaderGUI
 
         int source = (int)specularSourceProp.floatValue;
         EditorGUI.BeginChangeCheck();
-        //source = EditorGUILayout.Popup(Styles.specularSourceLabel, source, Styles.specSourceNames);
+        source = EditorGUILayout.Popup(Styles.specularSourceLabel, source, Styles.specSourceNames);
         if (EditorGUI.EndChangeCheck())
             specularSourceProp.floatValue = source;
-        /*
+
         SpecularSource specSource = (SpecularSource)specularSourceProp.floatValue;
         if (specSource != SpecularSource.NoSpecular)
         {
@@ -213,7 +212,6 @@ public class LightweightPipelineMaterialEditor : ShaderGUI
             if (EditorGUI.EndChangeCheck())
                 shininessProp.floatValue = shininess;
         }
-        */
     }
 
     private void DoEmission()
@@ -237,37 +235,36 @@ public class LightweightPipelineMaterialEditor : ShaderGUI
 
         int source = (int)reflectionSourceProp.floatValue;
         EditorGUI.BeginChangeCheck();
-        //source = EditorGUILayout.Popup(Styles.reflectionSourceLabel, source, Styles.speculaSourceNames);
+        source = EditorGUILayout.Popup(Styles.reflectionSourceLabel, source, Styles.speculaSourceNames);
         if (EditorGUI.EndChangeCheck())
             reflectionSourceProp.floatValue = (float)source;
 
         EditorGUILayout.Space();
-        //ReflectionSource reflectionSource = (ReflectionSource)reflectionSourceProp.floatValue;
-        //if (reflectionSource == ReflectionSource.Cubemap)
-          //  m_MaterialEditor.TexturePropertySingleLine(Styles.reflectionMapLabel, reflectionMapProp);
+        ReflectionSource reflectionSource = (ReflectionSource)reflectionSourceProp.floatValue;
+        if (reflectionSource == ReflectionSource.Cubemap)
+            m_MaterialEditor.TexturePropertySingleLine(Styles.reflectionMapLabel, reflectionMapProp);
     }
 
     private void ConvertFromLegacy(Material material, string oldShaderName)
     {
-        //UpgradeParams shaderUpgradeParams;
+        UpgradeParams shaderUpgradeParams;
 
         if (oldShaderName.Contains("Transp"))
         {
-            //shaderUpgradeParams.blendMode = UpgradeBlendMode.Alpha;
-            //shaderUpgradeParams.glosinessSource = GlossinessSource.SpecularAlpha;
+            shaderUpgradeParams.blendMode = UpgradeBlendMode.Alpha;
+            shaderUpgradeParams.glosinessSource = GlossinessSource.SpecularAlpha;
         }
         else if (oldShaderName.Contains("Cutout"))
         {
-            //shaderUpgradeParams.blendMode = UpgradeBlendMode.Cutout;
-            //shaderUpgradeParams.glosinessSource = GlossinessSource.SpecularAlpha;
+            shaderUpgradeParams.blendMode = UpgradeBlendMode.Cutout;
+            shaderUpgradeParams.glosinessSource = GlossinessSource.SpecularAlpha;
         }
         else
         {
-           // shaderUpgradeParams.blendMode = UpgradeBlendMode.Opaque;
-           // shaderUpgradeParams.glosinessSource = GlossinessSource.BaseAlpha;
+            shaderUpgradeParams.blendMode = UpgradeBlendMode.Opaque;
+            shaderUpgradeParams.glosinessSource = GlossinessSource.BaseAlpha;
         }
 
-        /*
         if (oldShaderName.Contains("Spec"))
             shaderUpgradeParams.specularSource = SpecularSource.SpecularTextureAndColor;
         else
@@ -282,7 +279,6 @@ public class LightweightPipelineMaterialEditor : ShaderGUI
         material.SetFloat("_SpecSource", (float)shaderUpgradeParams.specularSource);
         material.SetFloat("_GlossinessSource", (float)shaderUpgradeParams.glosinessSource);
         material.SetFloat("_ReflectionSource", (float)shaderUpgradeParams.reflectionSource);
-        */
 
         if (oldShaderName.Contains("Self-Illumin"))
         {

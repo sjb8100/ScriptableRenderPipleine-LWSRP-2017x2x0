@@ -5,7 +5,7 @@ using System;
 
 namespace UnityEngine.Experimental.Rendering.HDPipeline
 {
-    //[GenerateHLSL]
+    [GenerateHLSL]
     public class SssConstants
     {
         public const int SSS_N_PROFILES           = 8;  // Max. number of profiles, including the slot taken by the neutral profile
@@ -718,8 +718,8 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             // <<< Old SSS Model
 
             // These shaders don't need to be reference by RenderPipelineResource as they are not use at runtime
-           // m_ProfileMaterial       = Utilities.CreateEngineMaterial("Hidden/HDRenderPipeline/DrawSssProfile");
-            //m_TransmittanceMaterial = Utilities.CreateEngineMaterial("Hidden/HDRenderPipeline/DrawTransmittanceGraph");
+            m_ProfileMaterial       = Utilities.CreateEngineMaterial("Hidden/HDRenderPipeline/DrawSssProfile");
+            m_TransmittanceMaterial = Utilities.CreateEngineMaterial("Hidden/HDRenderPipeline/DrawTransmittanceGraph");
 
             m_ProfileImage          = new RenderTexture(256, 256, 0, RenderTextureFormat.DefaultHDR);
             m_TransmittanceImage    = new RenderTexture( 16, 256, 0, RenderTextureFormat.DefaultHDR);
@@ -732,27 +732,27 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             // Old SSS Model >>>
             bool useDisneySSS;
             {
-                //HDRenderPipeline hdPipeline = RenderPipelineManager.currentPipeline as HDRenderPipeline;
-                //useDisneySSS = hdPipeline.sssSettings.useDisneySSS;
+                HDRenderPipeline hdPipeline = RenderPipelineManager.currentPipeline as HDRenderPipeline;
+                useDisneySSS = hdPipeline.sssSettings.useDisneySSS;
             }
             // <<< Old SSS Model
 
             EditorGUI.BeginChangeCheck();
             {
-                //if (useDisneySSS)
-                //{
-                    //EditorGUILayout.PropertyField(m_ScatteringDistance, styles.sssProfileScatteringDistance);
+                if (useDisneySSS)
+                {
+                    EditorGUILayout.PropertyField(m_ScatteringDistance, styles.sssProfileScatteringDistance);
                 
-                   // GUI.enabled = false;
-                   // EditorGUILayout.PropertyField(m_MaxRadius, styles.sssProfileMaxRadius);
-                    //GUI.enabled = true;
-                //}
-               // else
-               // {
+                    GUI.enabled = false;
+                    EditorGUILayout.PropertyField(m_MaxRadius, styles.sssProfileMaxRadius);
+                    GUI.enabled = true;
+                }
+                else
+                {
                     EditorGUILayout.PropertyField(m_ScatterDistance1, styles.sssProfileScatterDistance1);
                     EditorGUILayout.PropertyField(m_ScatterDistance2, styles.sssProfileScatterDistance2);
                     EditorGUILayout.PropertyField(m_LerpWeight,       styles.sssProfileLerpWeight);
-               //}
+                }
 
                 m_TexturingMode.intValue    = EditorGUILayout.Popup(styles.sssTexturingMode,           m_TexturingMode.intValue,    styles.sssTexturingModeOptions);
                 m_TransmissionMode.intValue = EditorGUILayout.Popup(styles.sssProfileTransmissionMode, m_TransmissionMode.intValue, styles.sssTransmissionModeOptions);
@@ -782,7 +782,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             m_ProfileMaterial.SetFloat( "_MaxRadius",  r);
             m_ProfileMaterial.SetVector("_ShapeParam", S);
             // Old SSS Model >>>
-            //Utilities.SelectKeyword(m_ProfileMaterial, "SSS_MODEL_DISNEY", "SSS_MODEL_BASIC", useDisneySSS);
+            Utilities.SelectKeyword(m_ProfileMaterial, "SSS_MODEL_DISNEY", "SSS_MODEL_BASIC", useDisneySSS);
             // Apply the three-sigma rule, and rescale.
             float   s       = (1.0f / 3.0f) * SssConstants.SSS_BASIC_DISTANCE_SCALE;
             float   rMax    = Mathf.Max(m_ScatterDistance1.colorValue.r, m_ScatterDistance1.colorValue.g, m_ScatterDistance1.colorValue.b,
@@ -812,9 +812,9 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
             if (EditorGUI.EndChangeCheck())
             {
-                //HDRenderPipeline hdPipeline = RenderPipelineManager.currentPipeline as HDRenderPipeline;
+                HDRenderPipeline hdPipeline = RenderPipelineManager.currentPipeline as HDRenderPipeline;
                 // Validate each individual asset and update caches.
-                //hdPipeline.sssSettings.OnValidate();
+                hdPipeline.sssSettings.OnValidate();
             }
         }
     }

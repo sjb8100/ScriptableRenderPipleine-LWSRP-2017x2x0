@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 
-//[GenerateHLSL]
+[GenerateHLSL]
 public struct SFiniteLightData
 {
     // setup constant buffer
@@ -35,7 +35,7 @@ public struct SFiniteLightData
     public float probeBlendDistance;
 };
 
-//[GenerateHLSL]
+[GenerateHLSL]
 public struct SFiniteLightBound
 {
     public Vector3 boxAxisX;
@@ -46,7 +46,7 @@ public struct SFiniteLightBound
     public float radius;
 };
 
-//[GenerateHLSL]
+[GenerateHLSL]
 public struct DirectionalLight
 {
     public Vector3 color;
@@ -62,7 +62,7 @@ public struct DirectionalLight
     public float pad1;
 };
 
-//[GenerateHLSL]
+[GenerateHLSL]
 public class LightDefinitions
 {
     public static int MAX_NR_LIGHTS_PER_CAMERA = 1024;

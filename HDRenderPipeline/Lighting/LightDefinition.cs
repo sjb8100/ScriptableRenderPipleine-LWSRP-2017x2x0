@@ -6,7 +6,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
     // structure definition
     //-----------------------------------------------------------------------------
 
-   // [GenerateHLSL]
+    [GenerateHLSL]
     public enum GPULightType
     {
         Directional,
@@ -26,7 +26,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
     };
 
     // These structures share between C# and hlsl need to be align on float4, so we pad them.
-    //[GenerateHLSL]
+    [GenerateHLSL]
     public struct LightData
     {
         public Vector3 positionWS;
@@ -55,7 +55,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         public float unused;
     };
 
-    //[GenerateHLSL]
+    [GenerateHLSL]
     public struct DirectionalLightData
     {
         public Vector3 forward;
@@ -81,7 +81,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
     };
 
 
-    //[GenerateHLSL]
+    [GenerateHLSL]
     public enum EnvShapeType
     {
         None,
@@ -90,14 +90,14 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         Sky
     };
 
-    //[GenerateHLSL]
+    [GenerateHLSL]
     public enum EnvConstants
     {
         SpecCubeLodStep = 6
     }
 
 
-   // [GenerateHLSL]
+    [GenerateHLSL]
     public struct EnvLightData
     {
         public Vector3 positionWS;
@@ -125,7 +125,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
     // 1. All deferred opaque object that require split lighting (i.e output both specular and diffuse in two different render target). Typically Subsurface scattering material.
     // 2. All deferred opaque object.
     // 3. unused
-    //[GenerateHLSL]
+    [GenerateHLSL]
     // Caution: Value below are hardcoded in some shader (because properties doesn't support include). If order or value is change, please update corresponding ".shader"
     public enum StencilLightingUsage
     {

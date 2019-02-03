@@ -26,7 +26,7 @@ namespace UnityEngine.Experimental.Rendering
         public float    directionalLightNearPlaneOffset = kDefaultDirectionalNearPlaneOffset;
     }
 
-    //[GenerateHLSL]
+    [GenerateHLSL]
     public enum GPUShadowType
     {
         Point,
@@ -65,7 +65,7 @@ namespace UnityEngine.Experimental.Rendering
         Low
     }
 
-   // [GenerateHLSL]
+    [GenerateHLSL]
     public enum GPUShadowAlgorithm // 9 bits
     {
         PCF_1tap        = ShadowAlgorithm.PCF       << 3 | ShadowVariant.V0,
@@ -357,7 +357,7 @@ namespace UnityEngine.Experimental.Rendering
     }
 
     // This is the struct passed into shaders
-    //[GenerateHLSL]
+    [GenerateHLSL]
     public struct ShadowData
     {
         // shadow texture related params (need to be set by ShadowmapBase and derivatives)

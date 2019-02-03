@@ -4,7 +4,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 {
     public partial class Lit : RenderPipelineMaterial
     {
-        //[GenerateHLSL(PackingRules.Exact)]
+        [GenerateHLSL(PackingRules.Exact)]
         public enum MaterialId
         {
             LitSSS      = 0,
@@ -14,7 +14,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             LitAniso    = 4 // Should be the last as it is not setup by the users but generated based on anisotropy property
         };
 
-        //[GenerateHLSL]
+        [GenerateHLSL]
         public enum MaterialFeatureFlags
         {
             LitSSS      = 1 << 12,
@@ -28,46 +28,46 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         //-----------------------------------------------------------------------------
 
         // Main structure that store the user data (i.e user input of master node in material graph)
-       // [GenerateHLSL(PackingRules.Exact, false, true, 1000)]
+        [GenerateHLSL(PackingRules.Exact, false, true, 1000)]
         public struct SurfaceData
         {
-          //  [SurfaceDataAttributes("Base Color", false, true)]
+            [SurfaceDataAttributes("Base Color", false, true)]
             public Vector3 baseColor;
-          // [SurfaceDataAttributes("Specular Occlusion")]
+            [SurfaceDataAttributes("Specular Occlusion")]
             public float specularOcclusion;
 
-           // [SurfaceDataAttributes("Normal", true)]
+            [SurfaceDataAttributes("Normal", true)]
             public Vector3 normalWS;
-           // [SurfaceDataAttributes("Smoothness")]
+            [SurfaceDataAttributes("Smoothness")]
             public float perceptualSmoothness;
-           // [SurfaceDataAttributes("Material ID")]
+            [SurfaceDataAttributes("Material ID")]
             public MaterialId materialId;
 
-            //[SurfaceDataAttributes("Ambient Occlusion")]
+            [SurfaceDataAttributes("Ambient Occlusion")]
             public float ambientOcclusion;
 
             // MaterialId dependent attribute
 
             // standard
-           // [SurfaceDataAttributes("Tangent", true)]
+            [SurfaceDataAttributes("Tangent", true)]
             public Vector3 tangentWS;
-           // [SurfaceDataAttributes("Anisotropy")]
+            [SurfaceDataAttributes("Anisotropy")]
             public float anisotropy; // anisotropic ratio(0->no isotropic; 1->full anisotropy in tangent direction)
-           // [SurfaceDataAttributes("Metallic")]
+            [SurfaceDataAttributes("Metallic")]
             public float metallic;
-            //[SurfaceDataAttributes("Specular")]
+            [SurfaceDataAttributes("Specular")]
             public float specular; // 0.02, 0.04, 0.16, 0.2
 
             // SSS
-            //[SurfaceDataAttributes("Subsurface Radius")]
+            [SurfaceDataAttributes("Subsurface Radius")]
             public float subsurfaceRadius;
-            //[SurfaceDataAttributes("Thickness")]
+            [SurfaceDataAttributes("Thickness")]
             public float thickness;
-            //[SurfaceDataAttributes("Subsurface Profile")]
+            [SurfaceDataAttributes("Subsurface Profile")]
             public int subsurfaceProfile;
 
             // SpecColor
-            //[SurfaceDataAttributes("Specular Color", false, true)]
+            [SurfaceDataAttributes("Specular Color", false, true)]
             public Vector3 specularColor;
         };
 
@@ -75,7 +75,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         // BSDFData
         //-----------------------------------------------------------------------------
 
-        //[GenerateHLSL(PackingRules.Exact)]
+        [GenerateHLSL(PackingRules.Exact)]
         public enum TransmissionType
         {
             None = 0,
@@ -83,17 +83,17 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             ThinObject = 2,
         };
 
-        //[GenerateHLSL(PackingRules.Exact, false, true, 1030)]
+        [GenerateHLSL(PackingRules.Exact, false, true, 1030)]
         public struct BSDFData
         {
-            //[SurfaceDataAttributes("", false, true)]
+            [SurfaceDataAttributes("", false, true)]
             public Vector3 diffuseColor;
 
             public Vector3 fresnel0;
 
             public float specularOcclusion;
 
-            //[SurfaceDataAttributes("", true)]
+            [SurfaceDataAttributes("", true)]
             public Vector3 normalWS;
             public float perceptualRoughness;
             public float roughness;
@@ -102,9 +102,9 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             // MaterialId dependent attribute
 
             // standard
-            //[SurfaceDataAttributes("", true)]
+            [SurfaceDataAttributes("", true)]
             public Vector3 tangentWS;
-            //[SurfaceDataAttributes("", true)]
+            [SurfaceDataAttributes("", true)]
             public Vector3 bitangentWS;
             public float roughnessT;
             public float roughnessB;
@@ -128,40 +128,38 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         // RenderLoop management
         //-----------------------------------------------------------------------------
 
-        //[GenerateHLSL(PackingRules.Exact)]
+        [GenerateHLSL(PackingRules.Exact)]
         public enum GBufferMaterial
         {
             // Note: This count doesn't include the velocity buffer. On shader and csharp side the velocity buffer will be added by the framework
-            //Count = (ShaderConfig.k_PackgbufferInU16 == 1) ? 2 : 4
+            Count = (ShaderConfig.k_PackgbufferInU16 == 1) ? 2 : 4
         };
 
         //-----------------------------------------------------------------------------
         // GBuffer management
         //-----------------------------------------------------------------------------
 
-        //public override int GetMaterialGBufferCount() { return (int)GBufferMaterial.Count; }
+        public override int GetMaterialGBufferCount() { return (int)GBufferMaterial.Count; }
 
-        /*
         public override void GetMaterialGBufferDescription(out RenderTextureFormat[] RTFormat, out RenderTextureReadWrite[] RTReadWrite)
         {
-            //RTFormat = new RenderTextureFormat[(int)GBufferMaterial.Count];
-            //RTReadWrite = new RenderTextureReadWrite[(int)GBufferMaterial.Count];
+            RTFormat = new RenderTextureFormat[(int)GBufferMaterial.Count];
+            RTReadWrite = new RenderTextureReadWrite[(int)GBufferMaterial.Count];
 
-            //if (ShaderConfig.s_PackgbufferInU16 == 1)
-            //{
+            if (ShaderConfig.s_PackgbufferInU16 == 1)
+            {
                 // TODO: Just discovered that Unity doesn't support unsigned 16 RT format.
-             //   RTFormat[0] = RenderTextureFormat.ARGBInt; RTReadWrite[0] = RenderTextureReadWrite.Linear;
-            //    RTFormat[1] = RenderTextureFormat.ARGBInt; RTReadWrite[1] = RenderTextureReadWrite.Linear;
-            //}
-           // else
-            //{
-                //RTFormat[0] = RenderTextureFormat.ARGB32; RTReadWrite[0] = RenderTextureReadWrite.sRGB;
-                //RTFormat[1] = RenderTextureFormat.ARGB2101010; RTReadWrite[1] = RenderTextureReadWrite.Linear;
-                //RTFormat[2] = RenderTextureFormat.ARGB32; RTReadWrite[2] = RenderTextureReadWrite.Linear;
-                //RTFormat[3] = RenderTextureFormat.RGB111110Float; RTReadWrite[3] = RenderTextureReadWrite.Linear;
-            //}
+                RTFormat[0] = RenderTextureFormat.ARGBInt; RTReadWrite[0] = RenderTextureReadWrite.Linear;
+                RTFormat[1] = RenderTextureFormat.ARGBInt; RTReadWrite[1] = RenderTextureReadWrite.Linear;
+            }
+            else
+            {
+                RTFormat[0] = RenderTextureFormat.ARGB32; RTReadWrite[0] = RenderTextureReadWrite.sRGB;
+                RTFormat[1] = RenderTextureFormat.ARGB2101010; RTReadWrite[1] = RenderTextureReadWrite.Linear;
+                RTFormat[2] = RenderTextureFormat.ARGB32; RTReadWrite[2] = RenderTextureReadWrite.Linear;
+                RTFormat[3] = RenderTextureFormat.RGB111110Float; RTReadWrite[3] = RenderTextureReadWrite.Linear;
+            }
         }
-        */
 
         //-----------------------------------------------------------------------------
         // Init precomputed texture
@@ -236,7 +234,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
         public override void Build(RenderPipelineResources renderPipelineResources)
         {
-            //m_InitPreFGD = Utilities.CreateEngineMaterial("Hidden/HDRenderPipeline/PreIntegratedFGD");
+            m_InitPreFGD = Utilities.CreateEngineMaterial("Hidden/HDRenderPipeline/PreIntegratedFGD");
 
             // For DisneyDiffuse integration values goes from (0.5 to 1.53125). GGX need 0 to 1. Use float format.
             m_PreIntegratedFGD = new RenderTexture(128, 128, 0, RenderTextureFormat.RGB111110Float, RenderTextureReadWrite.Linear);
@@ -252,10 +250,10 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
                 filterMode = FilterMode.Bilinear
             };
 
-            //LoadLUT(m_LtcData, 0, TextureFormat.RGBAHalf,   s_LtcGGXMatrixData);
-            //LoadLUT(m_LtcData, 1, TextureFormat.RGBAHalf,   s_LtcDisneyDiffuseMatrixData);
+            LoadLUT(m_LtcData, 0, TextureFormat.RGBAHalf,   s_LtcGGXMatrixData);
+            LoadLUT(m_LtcData, 1, TextureFormat.RGBAHalf,   s_LtcDisneyDiffuseMatrixData);
             // TODO: switch to RGBA64 when it becomes available.
-            //LoadLUT(m_LtcData, 2, TextureFormat.RGBAHalf,   s_LtcGGXMagnitudeData, s_LtcGGXFresnelData, s_LtcDisneyDiffuseMagnitudeData);
+            LoadLUT(m_LtcData, 2, TextureFormat.RGBAHalf,   s_LtcGGXMagnitudeData, s_LtcGGXFresnelData, s_LtcDisneyDiffuseMagnitudeData);
 
             m_LtcData.Apply();
 
@@ -264,7 +262,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
         public override void Cleanup()
         {
-            //Utilities.Destroy(m_InitPreFGD);
+            Utilities.Destroy(m_InitPreFGD);
 
             // TODO: how to delete RenderTexture ? or do we need to do it ?
             m_isInit = false;

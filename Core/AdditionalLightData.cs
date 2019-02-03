@@ -169,13 +169,10 @@ namespace UnityEngine.Experimental.Rendering
                 UnityEditor.EditorGUILayout.PropertyField( m_ShadowCascadeCount );
                 if( UnityEditor.EditorGUI.EndChangeCheck() )
                 {
-                    
-                    /*
                     const int kMaxCascades = (int) ShadowAtlas.k_MaxCascadesInShader; // depending on where you look this is either 32 or 4, so we're limiting it to 4 for now
                     int newcnt = m_ShadowCascadeCount.intValue <= 0 ? 1 : (m_ShadowCascadeCount.intValue > kMaxCascades ? kMaxCascades : m_ShadowCascadeCount.intValue);
                     m_ShadowCascadeCount.intValue = newcnt;
                     m_ShadowCascadeRatios.arraySize = newcnt-1;
-                    */
                 }
                 UnityEditor.EditorGUI.indentLevel++;
                 for( int i = 0; i < m_ShadowCascadeRatios.arraySize; i++ )

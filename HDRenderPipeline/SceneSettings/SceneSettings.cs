@@ -31,12 +31,12 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         {
             SceneSettingsManager.instance.AddSceneSettings(this);
 
-           // HDRenderPipeline hdPipeline = RenderPipelineManager.currentPipeline as HDRenderPipeline;
+            HDRenderPipeline hdPipeline = RenderPipelineManager.currentPipeline as HDRenderPipeline;
 
-            //if (hdPipeline != null)
-           // {
-           //     hdPipeline.OnSceneLoad();
-           // }
+            if (hdPipeline != null)
+            {
+                hdPipeline.OnSceneLoad();
+            }
         }
 
         void OnDisable()

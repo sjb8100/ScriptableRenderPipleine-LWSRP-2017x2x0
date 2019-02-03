@@ -55,7 +55,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
             if (!m_GgxConvolveMaterial)
             {
-                //m_GgxConvolveMaterial = Utilities.CreateEngineMaterial(m_RenderPipelinesResources.GGXConvolve);
+                m_GgxConvolveMaterial = Utilities.CreateEngineMaterial(m_RenderPipelinesResources.GGXConvolve);
             }
 
             if (!m_GgxIblSampleData)
@@ -95,7 +95,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
                 for (int face = 0; face < 6; ++face)
                 {
-                    //Utilities.SetRenderTarget(context, target, ClearFlag.ClearNone, mip, (CubemapFace)face);
+                    Utilities.SetRenderTarget(context, target, ClearFlag.ClearNone, mip, (CubemapFace)face);
 
                     var cmd = new CommandBuffer { name = "" };
                     cmd.DrawMesh(cubemapFaceMesh[face], Matrix4x4.identity, m_GgxConvolveMaterial, 0, 0, props);

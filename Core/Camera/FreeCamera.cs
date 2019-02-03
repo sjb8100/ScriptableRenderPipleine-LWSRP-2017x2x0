@@ -20,7 +20,7 @@ namespace UnityEngine.Experimental.Rendering
         private bool m_Valid = true;
         void OnEnable()
         {
-           // m_Valid = Debugging.CheckRequiredInputAxisMapping(m_RequiredInputAxes);
+            m_Valid = Debugging.CheckRequiredInputAxisMapping(m_RequiredInputAxes);
         }
 
         void Update()

@@ -6,7 +6,7 @@ namespace UnityEditor.Experimental.Rendering.LightweightPipeline
     public static class LightweightShaderHelper
     {
         public static void SetMaterialBlendMode(Material material)
-        {/*
+        {
             UpgradeBlendMode mode = (UpgradeBlendMode) material.GetFloat("_Mode");
             switch (mode)
             {
@@ -40,7 +40,6 @@ namespace UnityEditor.Experimental.Rendering.LightweightPipeline
                     material.renderQueue = (int) RenderQueue.Transparent;
                     break;
             }
-            */
         }
 
         public static void SetKeyword(Material material, string keyword, bool enable)

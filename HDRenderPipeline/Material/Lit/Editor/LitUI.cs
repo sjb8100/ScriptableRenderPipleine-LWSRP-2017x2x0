@@ -237,13 +237,13 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
 
         protected void ShaderSSSInputGUI(Material material)
         {
-            //HDRenderPipeline hdPipeline = RenderPipelineManager.currentPipeline as HDRenderPipeline;
+            HDRenderPipeline hdPipeline = RenderPipelineManager.currentPipeline as HDRenderPipeline;
 
             if (subsurfaceProfile == null)
             {
                 // Attempt to load the profile from the SSS Settings.
                 int profileID = (int)subsurfaceProfileID.floatValue;
-                /*
+
                 if (0 <= profileID && profileID < hdPipeline.sssSettings.profiles.Length &&
                     hdPipeline.sssSettings.profiles[profileID] != null)
                 {
@@ -253,7 +253,6 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
                     // Refresh the ID of the profile.
                     hdPipeline.sssSettings.OnValidate();
                 }
-                */
             }
 
             subsurfaceProfile = EditorGUILayout.ObjectField(Styles.subsurfaceProfileText, subsurfaceProfile, typeof(SubsurfaceScatteringProfile), false) as SubsurfaceScatteringProfile;
@@ -266,7 +265,6 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
                 // Load the profile from the GUI field.
                 int profileID = subsurfaceProfile.settingsIndex;
 
-                /*
                 if (0 <= profileID && profileID < hdPipeline.sssSettings.profiles.Length &&
                     hdPipeline.sssSettings.profiles[profileID] != null &&
                     hdPipeline.sssSettings.profiles[profileID] == subsurfaceProfile)
@@ -276,10 +274,9 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
                 }
                 else
                 {
-                */
                     subsurfaceProfile = null;
                     Debug.LogError("The SSS Profile assigned to the material has an invalid index. First, add the Profile to the SSS Settings, and then reassign it to the material.");
-                //}
+                }
             }
 
             if (!validProfile)

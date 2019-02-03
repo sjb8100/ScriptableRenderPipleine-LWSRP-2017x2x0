@@ -7,7 +7,7 @@ using System;
 //-----------------------------------------------------------------------------
 namespace UnityEngine.Experimental.Rendering.HDPipeline
 {
-    //[GenerateHLSL(PackingRules.Exact)]
+    [GenerateHLSL(PackingRules.Exact)]
     public enum ShaderPass
     {
         GBuffer,

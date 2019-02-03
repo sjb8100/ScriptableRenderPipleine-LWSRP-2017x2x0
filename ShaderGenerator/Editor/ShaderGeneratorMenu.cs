@@ -5,7 +5,7 @@ namespace UnityEditor.Experimental.Rendering
         [UnityEditor.MenuItem("RenderPipeline/Generate Shader Includes")]
         static void GenerateShaderIncludes()
         {
-            //CSharpToHLSL.GenerateAll();
+            CSharpToHLSL.GenerateAll();
             UnityEditor.AssetDatabase.Refresh();
         }
     }

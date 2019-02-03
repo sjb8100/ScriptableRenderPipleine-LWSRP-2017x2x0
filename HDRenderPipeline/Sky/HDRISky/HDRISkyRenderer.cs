@@ -14,23 +14,23 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
         public override void Build()
         {
-           // m_SkyHDRIMaterial = Utilities.CreateEngineMaterial("Hidden/HDRenderPipeline/Sky/SkyHDRI");
+            m_SkyHDRIMaterial = Utilities.CreateEngineMaterial("Hidden/HDRenderPipeline/Sky/SkyHDRI");
         }
 
         public override void Cleanup()
         {
-            //Utilities.Destroy(m_SkyHDRIMaterial);
+            Utilities.Destroy(m_SkyHDRIMaterial);
         }
 
         public override void SetRenderTargets(BuiltinSkyParameters builtinParams)
         {
             if (builtinParams.depthBuffer == BuiltinSkyParameters.nullRT)
             {
-                //Utilities.SetRenderTarget(builtinParams.renderContext, builtinParams.colorBuffer);
+                Utilities.SetRenderTarget(builtinParams.renderContext, builtinParams.colorBuffer);
             }
             else
             {
-               // Utilities.SetRenderTarget(builtinParams.renderContext, builtinParams.colorBuffer, builtinParams.depthBuffer);
+                Utilities.SetRenderTarget(builtinParams.renderContext, builtinParams.colorBuffer, builtinParams.depthBuffer);
             }
         }
 

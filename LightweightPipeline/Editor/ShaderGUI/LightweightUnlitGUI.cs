@@ -21,7 +21,7 @@ public class LightweightUnlitGUI : ShaderGUI
             new GUIContent("MainTex (RGB) Alpha (A)", "Base Color and Alpha")
         };
 
-        //public static readonly string[] blendNames = Enum.GetNames(typeof(UpgradeBlendMode));
+        public static readonly string[] blendNames = Enum.GetNames(typeof(UpgradeBlendMode));
 
         public static string renderingModeLabel = "Rendering Mode";
         public static string alphaCutoffLabel = "Alpha Cutoff";
@@ -44,7 +44,7 @@ public class LightweightUnlitGUI : ShaderGUI
 
         int modeValue = (int)blendModeProp.floatValue;
         EditorGUI.BeginChangeCheck();
-        //modeValue = EditorGUILayout.Popup(Styles.renderingModeLabel, modeValue, Styles.blendNames);
+        modeValue = EditorGUILayout.Popup(Styles.renderingModeLabel, modeValue, Styles.blendNames);
         if (EditorGUI.EndChangeCheck())
             blendModeProp.floatValue = modeValue;
 
@@ -52,8 +52,8 @@ public class LightweightUnlitGUI : ShaderGUI
         m_MaterialEditor.TexturePropertySingleLine(mainTexLabel, mainTexProp, mainColorProp);
         m_MaterialEditor.TextureScaleOffsetProperty(mainTexProp);
 
-        //if ((UpgradeBlendMode) modeValue == UpgradeBlendMode.Cutout)
-           // m_MaterialEditor.RangeProperty(alphaCutoffProp, Styles.alphaCutoffLabel);
+        if ((UpgradeBlendMode) modeValue == UpgradeBlendMode.Cutout)
+            m_MaterialEditor.RangeProperty(alphaCutoffProp, Styles.alphaCutoffLabel);
 
         EditorGUILayout.Space();
         EditorGUILayout.Space();

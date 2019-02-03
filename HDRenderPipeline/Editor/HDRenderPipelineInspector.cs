@@ -112,7 +112,6 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             // Following way of getting property allow to handle change of properties name with serializations
 
             // Tile settings
-            /*
             m_enableTileAndCluster = FindProperty(x => x.tileSettings.enableTileAndCluster);
             m_enableSplitLightEvaluation = FindProperty(x => x.tileSettings.enableSplitLightEvaluation);
             m_enableComputeLightEvaluation = FindProperty(x => x.tileSettings.enableComputeLightEvaluation);
@@ -122,34 +121,33 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             m_enableFptlForOpaqueWhenClustered = FindProperty(x => x.tileSettings.enableFptlForOpaqueWhenClustered);
             m_enableBigTilePrepass = FindProperty(x => x.tileSettings.enableBigTilePrepass);
             m_tileDebugByCategory = FindProperty(x => x.tileSettings.tileDebugByCategory);
-            */
 
             // Shadow settings
-            //m_ShadowAtlasWidth = FindProperty(x => x.shadowInitParams.shadowAtlasWidth);
-            //m_ShadowAtlasHeight = FindProperty(x => x.shadowInitParams.shadowAtlasHeight);
+            m_ShadowAtlasWidth = FindProperty(x => x.shadowInitParams.shadowAtlasWidth);
+            m_ShadowAtlasHeight = FindProperty(x => x.shadowInitParams.shadowAtlasHeight);
 
             // Texture settings
-            //m_SpotCookieSize = FindProperty(x => x.textureSettings.spotCookieSize);
-            //m_PointCookieSize = FindProperty(x => x.textureSettings.pointCookieSize);
-            //m_ReflectionCubemapSize = FindProperty(x => x.textureSettings.reflectionCubemapSize);
+            m_SpotCookieSize = FindProperty(x => x.textureSettings.spotCookieSize);
+            m_PointCookieSize = FindProperty(x => x.textureSettings.pointCookieSize);
+            m_ReflectionCubemapSize = FindProperty(x => x.textureSettings.reflectionCubemapSize);
 
             // Rendering settings
-           // m_RenderingUseForwardOnly = FindProperty(x => x.renderingSettings.useForwardRenderingOnly);
-           // m_RenderingUseDepthPrepass = FindProperty(x => x.renderingSettings.useDepthPrepass);
+            m_RenderingUseForwardOnly = FindProperty(x => x.renderingSettings.useForwardRenderingOnly);
+            m_RenderingUseDepthPrepass = FindProperty(x => x.renderingSettings.useDepthPrepass);
 
             // Subsurface Scattering Settings
             // Old SSS Model >>>
-           // m_UseDisneySSS = FindProperty(x => x.sssSettings.useDisneySSS);
+            m_UseDisneySSS = FindProperty(x => x.sssSettings.useDisneySSS);
             // <<< Old SSS Model
-            //m_Profiles    = FindProperty(x => x.sssSettings.profiles);
+            m_Profiles    = FindProperty(x => x.sssSettings.profiles);
             m_NumProfiles = m_Profiles.FindPropertyRelative("Array.size");
         }
 
-        //SerializedProperty FindProperty<TValue>(Expression<Func<HDRenderPipelineAsset, TValue>> expr)
-        //{
-            //var path = Utilities.GetFieldPath(expr);
-            //return serializedObject.FindProperty(path);
-        //}
+        SerializedProperty FindProperty<TValue>(Expression<Func<HDRenderPipelineAsset, TValue>> expr)
+        {
+            var path = Utilities.GetFieldPath(expr);
+            return serializedObject.FindProperty(path);
+        }
 
         static void HackSetDirty(RenderPipelineAsset asset)
         {
@@ -199,8 +197,8 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             EditorGUILayout.PropertyField(m_UseDisneySSS);
             if (EditorGUI.EndChangeCheck())
             {
-                //HDRenderPipeline hdPipeline = RenderPipelineManager.currentPipeline as HDRenderPipeline;
-                //hdPipeline.CreateSssMaterials(m_UseDisneySSS.boolValue);
+                HDRenderPipeline hdPipeline = RenderPipelineManager.currentPipeline as HDRenderPipeline;
+                hdPipeline.CreateSssMaterials(m_UseDisneySSS.boolValue);
             }
             // <<< Old SSS Model
             EditorGUILayout.PropertyField(m_NumProfiles, styles.sssNumProfiles);
@@ -283,10 +281,10 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         public override void OnInspectorGUI()
         {
             var renderContext = target as HDRenderPipelineAsset;
-            //HDRenderPipeline renderpipeline = UnityEngine.Experimental.Rendering.RenderPipelineManager.currentPipeline as HDRenderPipeline;
+            HDRenderPipeline renderpipeline = UnityEngine.Experimental.Rendering.RenderPipelineManager.currentPipeline as HDRenderPipeline;
 
-            //if (!renderContext || renderpipeline == null)
-                //return;
+            if (!renderContext || renderpipeline == null)
+                return;
 
             serializedObject.Update();
 
